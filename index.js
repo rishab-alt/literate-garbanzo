@@ -3,21 +3,26 @@ const os = require('os')
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const TOKEN = process.env.TOKEN;
-const PREFIX = ''
+const PREFIX = process.env.PREFIX;
+const avatar = require('./avatar')
 
 bot.on('ready', () => {
     console.info(`Logged in as ${bot.user.tag}! Ready For Action!`);
   });
 
+  if (msg.content === 'avatar') {
+    await avatar.run(bot, msg, []);
+}
+
   bot.on('message', msg => {
-    if(msg.content === '_hello'){
+    if(msg.content === 'hello'){
       msg.reply(`Hello there`)
     }
   })
 
 
   bot.on('message', msg => {
-    if (msg.content === '_uptime') {
+    if (msg.content === 'uptime') {
       msg.channel.send({embed: {
        color:  3447003,
        description: `**the Server Uptime is ${os.uptime} seconds**`,
@@ -26,7 +31,7 @@ bot.on('ready', () => {
   });
 
   bot.on('message', msg => {
-    if (msg.content === '_ping') {
+    if (msg.content === 'ping') {
       msg.channel.send({embed: {
        color:  3447003,
        description: ('```Pong! '+""+(Date.now() -
@@ -36,10 +41,10 @@ bot.on('ready', () => {
   });
 
   bot.on('message', msg => {
-    if (msg.content === '_help') {
+    if (msg.content === 'help') {
       msg.channel.send({embed: {
        color:  3447003,
-       description: '```You Need Help i See🤓\n _uptime to see uptime, _ping to see ping````'
+       description: '```You Need Help i See 🤓\n _uptime to see uptime\n_ping to see ping````'
        
      }})
     }
