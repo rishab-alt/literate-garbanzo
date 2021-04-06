@@ -27,5 +27,6 @@ bot.on('ready', () => {
        msg.createdTimestamp)+'ms'+"`");
     }
   })
+
   
 bot.login(TOKEN);
