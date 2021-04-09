@@ -1,55 +1,39 @@
-require('dotenv').config();
-const os = require('os')
 const Discord = require('discord.js');
-const bot = new Discord.Client();
-const TOKEN = process.env.TOKEN;
-const PREFIX = process.env.PREFIX;
-const avatar = require('./avatar')
+const { prefix, token } = require('./config.json');
+const giveMeAJoke = require('discord-jokes')
 
-bot.on('ready', () => {
-    console.info(`Logged in as ${bot.user.tag}! Ready For Action!`);
-  });
+const client = new Discord.Client();
 
-  if (msg.content === 'avatar') {
-    await avatar.run(bot, msg, []);
-}
+client.once('ready', () => {
+	console.log('Ready!');
+});
 
-  bot.on('message', msg => {
-    if(msg.content === 'hello'){
-      msg.reply(`Hello there`)
-    }
-  })
+client.on('message', message => {
+	if (!message.content.startsWith(prefix) || message.author.bot) return;
 
+	const args = message.content.slice(prefix.length).trim().split(/ +/);
+	const command = args.shift().toLowerCase();
 
-  bot.on('message', msg => {
-    if (msg.content === 'uptime') {
-      msg.channel.send({embed: {
-       color:  3447003,
-       description: `**the Server Uptime is ${os.uptime} seconds**`,
-     }})
-    }
-  });
+	if (command === 'ping') {
+		message.channel.send('Pong.');
+	} else if (command === 'beep') {
+		message.channel.send('Boop.');
+	}
+});
 
-  bot.on('message', msg => {
-    if (msg.content === 'ping') {
-      msg.channel.send({embed: {
-       color:  3447003,
-       description: ('```Pong! '+""+(Date.now() -
-       msg.createdTimestamp)+'ms'+"```")
-     }})
-    }
-  });
+client.on('message', async message => {
+	if(message.content == "_joke"){
+		giveMeAJoke.getRandomDadJoke(function(joke){
+			message.channel.send(joke);
+		})
+	} 
+});
+client.on('message', async message => {
+	if(message.content == "_loljokes"){
+		giveMeAJoke.getRandomCNJoke(function(joke){
+			message.channel.send(joke);
+		})
+	}
+});
 
-  bot.on('message', msg => {
-    if (msg.content === 'help') {
-      msg.channel.send({embed: {
-       color:  3447003,
-       description: '```You Need Help i See 🤓\n _uptime to see uptime\n_ping to see ping````'
-       
-     }})
-    }
-  });
-  
-  
-  
-bot.login(TOKEN);
+client.login(token);
